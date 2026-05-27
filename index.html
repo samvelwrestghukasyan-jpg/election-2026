@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ընտրություններ 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --deep: #0a0c14;
+    --surface: #111520;
+    --surface2: #1a1f30;
+    --text: #e8e4d8;
+    --text-muted: #7a7a8a;
+    --red: #c0392b;
+    --blue: #1a3a6b;
+    --accent: #d4a843;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(201,168,76,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 10% 80%,  rgba(26,58,107,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 50% at 90% 90%,  rgba(192,57,43,0.12) 0%, transparent 55%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--gold-light);
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle var(--d) var(--delay) infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.4); }
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    pointer-events: none; z-index: 1;
+  }
+
+  .wrapper { position: relative; z-index: 2; }
+
+  header {
+    text-align: center;
+    padding: 60px 20px 30px;
+    position: relative;
+  }
+  .header-line {
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    margin-bottom: 10px;
+  }
+  .header-line::before,
+  .header-line::after {
+    content: '';
+    flex: 1; max-width: 180px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .coat-icon {
+    font-size: 2.2rem;
+    filter: drop-shadow(0 0 12px rgba(201,168,76,0.5));
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+  @keyframes pulse-glow {
+    0%,100% { filter: drop-shadow(0 0 8px rgba(201,168,76,0.4)); }
+    50% { filter: drop-shadow(0 0 20px rgba(201,168,76,0.8)); }
+  }
+
+  .election-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #f0d080 0%, #c9a84c 40%, #fff8e8 70%, #c9a84c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    margin-top: 10px;
+    font-weight: 300;
+  }
+
+  .divider {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    margin: 28px auto;
+    width: fit-content;
+  }
+  .divider span { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+  .divider span:last-child { transform: scaleX(-1); }
+  .divider-gem {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px var(--gold);
+  }
+
+  .countdown-section {
+    text-align: center;
+    padding: 0 20px 50px;
+  }
+  .countdown-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .countdown {
+    display: flex; justify-content: center; gap: clamp(12px, 3vw, 32px);
+    flex-wrap: wrap;
+  }
+  .countdown-block {
+    display: flex; flex-direction: column; align-items: center;
+    position: relative;
+  }
+  .countdown-box {
+    width: clamp(72px, 14vw, 100px);
+    height: clamp(72px, 14vw, 100px);
+    background: linear-gradient(145deg, #1e2436, #111520);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,168,76,0.1);
+  }
+  .countdown-box::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 50%;
+    background: rgba(255,255,255,0.025);
+    border-radius: 12px 12px 0 0;
+  }
+  .countdown-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(201,168,76,0.4);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .countdown-num.flip { transform: scale(1.15); }
+  .countdown-unit {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  .colon {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: rgba(201,168,76,0.3);
+    align-self: center;
+    margin-bottom: 20px;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.1; } }
+
+  .candidates-section { padding: 0 20px 80px; }
+  .section-title {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+  .section-title em {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  .candidates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 28px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .candidate-card {
+    background: linear-gradient(160deg, #181d2e 0%, #111520 100%);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease, border-color 0.3s;
+    cursor: pointer;
+    animation: card-enter 0.8s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .candidate-card:nth-child(1) { animation-delay: 0.1s; }
+  .candidate-card:nth-child(2) { animation-delay: 0.25s; }
+  .candidate-card:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes card-enter {
+    from { opacity: 0; transform: translateY(40px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+  }
+
+  .candidate-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(201,168,76,0.5);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(201,168,76,0.08);
+  }
+
+  .candidate-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--party-color, var(--gold));
+    opacity: 0.8;
+  }
+
+  .candidate-card::after {
+    content: '';
+    position: absolute; top: 12px; right: 12px;
+    width: 40px; height: 40px;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    border-right: 1px solid rgba(201,168,76,0.2);
+    border-radius: 0 8px 0 0;
+    pointer-events: none;
+  }
+
+  .card-photo-wrap {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #1e2436 0%, #0d1020 100%);
+  }
+  .card-photo-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.6s ease;
+    filter: grayscale(20%) contrast(1.05);
+  }
+  .candidate-card:hover .card-photo-wrap img {
+    transform: scale(1.06);
+    filter: grayscale(0%) contrast(1.08);
+  }
+
+  .photo-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px;
+    opacity: 0.35;
+  }
+  .photo-placeholder .icon { font-size: 4rem; }
+  .photo-placeholder .ph-text { font-size: 0.7rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; }
+
+  .photo-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,12,20,0.85) 0%, transparent 55%);
+  }
+
+  .party-badge {
+    position: absolute; top: 14px; left: 14px;
+    padding: 4px 12px;
+    background: rgba(10,12,20,0.7);
+    border: 1px solid var(--party-color, var(--gold));
+    border-radius: 20px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--party-color, var(--gold));
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+  }
+
+  .number-badge {
+    position: absolute; bottom: 14px; right: 14px;
+    width: 38px; height: 38px;
+    background: rgba(10,12,20,0.8);
+    border: 1px solid rgba(201,168,76,0.35);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gold);
+    backdrop-filter: blur(6px);
+  }
+
+  .card-body {
+    padding: 22px 24px 26px;
+  }
+
+  .candidate-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 4px;
+    letter-spacing: 0.01em;
+  }
+
+  .candidate-title {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  .card-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--party-color, var(--gold)), transparent);
+    opacity: 0.3;
+    margin-bottom: 14px;
+  }
+
+  .candidate-slogan {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .vote-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 20px;
+    width: 100%;
+    padding: 13px 0;
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 8px;
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .vote-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.06), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  .vote-btn:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); box-shadow: 0 0 20px rgba(201,168,76,0.1); }
+  .vote-btn:hover::before { transform: translateX(100%); }
+  .vote-btn:active { transform: scale(0.98); }
+  .vote-btn.voted {
+    background: rgba(201,168,76,0.12);
+    border-color: var(--gold);
+    color: var(--gold-light);
+  }
+
+  footer {
+    text-align: center;
+    padding: 30px 20px 50px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(201,168,76,0.08);
+  }
+  footer .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: rgba(201,168,76,0.4);
+    margin-bottom: 8px;
+  }
+
+  .toast {
+    position: fixed; bottom: 36px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg, #1e2436, #111520);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    z-index: 999;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .progress-section {
+    max-width: 1080px; margin: 0 auto 60px; padding: 0 20px;
+    display: none;
+  }
+  .progress-section.visible { display: block; }
+  .progress-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+  .progress-item { margin-bottom: 18px; }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 0.75rem; color: var(--text-muted); margin-bottom: 7px;
+    font-weight: 600; letter-spacing: 0.05em;
+  }
+  .progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--party-color, var(--gold));
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .election-date {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .election-date strong { color: var(--gold); font-weight: 600; }
+
+  /* Ավելացրու style-ի վերջում */
+
+@media (max-width: 480px) {
+  .countdown {
+    gap: 12px;
+  }
+  
+  .countdown-box {
+    width: 68px;
+    height: 68px;
+  }
+  
+  .countdown-num {
+    font-size: 1.65rem;
+  }
+
+  .candidates-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 0 16px;
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 8.5vw, 3.8rem);
+  }
+
+  .candidate-card {
+    margin: 0 auto;
+    max-width: 100%;
+  }
+}
+
+/* Փոքր էկրանների համար countdown-ը ավելի կոմպակտ դարձնելու համար */
+@media (max-width: 380px) {
+  .countdown {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .colon {
+    display: none; /* կամ փոքրացրու */
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="wrapper">
+
+  <header>
+    <p class="election-label">Պաշտոնական ← Ազատ ← Ժողովրդավարական</p>
+    <div class="header-line">
+      <span class="coat-icon">🏛️</span>
+    </div>
+    <h1>Ընտրություններ<br>2026</h1>
+    <p class="subtitle">Ընտրե՛ք Ձեր Ներկայացուցչին</p>
+    <div class="divider">
+      <span></span><div class="divider-gem"></div><span></span>
+    </div>
+  </header>
+
+  <section class="countdown-section">
+    <p class="election-date">Ընտրության օր՝ <strong id="electionDateDisplay">—</strong></p>
+    <p class="countdown-label">Մինչև ընտրությունները մնացել է</p>
+    <div class="countdown">
+      <div class="countdown-block">
+        <div class="countdown-box"><span class="countdown-num" id="cd-days">00</span></div>
+        <span class="countdown-unit">Օր</span>
+      </div>
+      <div class="colon">:</div>
+      <div class="countdown-block">
+        <div class="countdown-box"><span class="countdown-num" id="cd-hours">00</span></div>
+        <span class="countdown-unit">Ժամ</span>
+      </div>
+      <div class="colon">:</div>
+      <div class="countdown-block">
+        <div class="countdown-box"><span class="countdown-num" id="cd-mins">00</span></div>
+        <span class="countdown-unit">Րոպե</span>
+      </div>
+      <div class="colon">:</div>
+      <div class="countdown-block">
+        <div class="countdown-box"><span class="countdown-num" id="cd-secs">00</span></div>
+        <span class="countdown-unit">Վայրկյան</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="candidates-section">
+    <p class="section-title">Ընտրեք <em>Ձեր Թեկնածուին</em></p>
+
+    <div class="candidates-grid" id="candidatesGrid">
+
+      <div class="candidate-card" style="--party-color: #c0392b" onclick="handleVote(this, 0)">
+        <div class="card-photo-wrap">
+          <img src="images/logo1.png" alt="Թեկնածու 16" onerror="this.parentElement.innerHTML=placeholderHTML(1)">
+          <div class="photo-overlay"></div>
+          <span class="party-badge" style="--party-color:#c0392b">Կուսակցություն Ա</span>
+          <span class="number-badge">16</span>
+        </div>
+        <div class="card-body">
+          <h2 class="candidate-name">Նիկոլ Փաշինյան</h2>
+          <p class="candidate-title">Ազգային Ժողովի Թեկնածու</p>
+          <div class="card-divider" style="--party-color:#c0392b"></div>
+          <p class="candidate-slogan">«Հայաստանի ապագան կառուցում ենք միասին՝ ամուր հիմքերի վրա»</p>
+          <button class="vote-btn" data-index="0">
+            <span>✦</span> Ընտրել
+          </button>
+        </div>
+      </div>
+
+      <div class="candidate-card" style="--party-color: #1a6b3a" onclick="handleVote(this, 1)">
+        <div class="card-photo-wrap">
+          <img src="images/logo2.png" alt="Թեկնածու 3" onerror="this.parentElement.innerHTML=placeholderHTML(2)">
+          <div class="photo-overlay"></div>
+          <span class="party-badge" style="--party-color:#1a6b3a">Կուսակցություն Բ</span>
+          <span class="number-badge">3</span>
+        </div>
+        <div class="card-body">
+          <h2 class="candidate-name">Սամվել Կարապետյան</h2>
+          <p class="candidate-title">Ազգային Ժողովի Թեկնածու</p>
+          <div class="card-divider" style="--party-color:#1a6b3a"></div>
+          <p class="candidate-slogan">«Կրթություն, Առողջություն, Արդարություն — ժողովրդի կողքին»</p>
+          <button class="vote-btn" data-index="1">
+            <span>✦</span> Ընտրել
+          </button>
+        </div>
+      </div>
+
+      <div class="candidate-card" style="--party-color: #1a3a6b" onclick="handleVote(this, 2)">
+        <div class="card-photo-wrap">
+          <img src="images/logo3.png" alt="Թեկնածու 3" onerror="this.parentElement.innerHTML=placeholderHTML(3)">
+          <div class="photo-overlay"></div>
+          <span class="party-badge" style="--party-color:#3a6bc0">Կուսակցություն Գ</span>
+          <span class="number-badge">17</span>
+        </div>
+        <div class="card-body">
+          <h2 class="candidate-name">Ռոբերտ Քոչարյան</h2>
+          <p class="candidate-title">Ազգային Ժողովի Թեկնածու</p>
+          <div class="card-divider" style="--party-color:#3a6bc0"></div>
+          <p class="candidate-slogan">«Զարգացում, Ապահովություն, Ազատություն — Հայաստան նոր հորիզոնների»</p>
+          <button class="vote-btn" data-index="2">
+            <span>✦</span> Ընտրել
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="progress-section" id="progressSection">
+    <p class="progress-title">Ձայների Բաշխում</p>
+    <div id="progressBars"></div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">✦ ՀՀ Կենտրոնական Ընտրական Հանձնաժողով ✦</div>
+    <p>© 2026 — Բոլոր Իրավունքները Պաշտպանված Են</p>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s`;
+  starsEl.appendChild(s);
+}
+
+const ELECTION_DATE = new Date('2026-06-07T08:00:00');
+
+const months = ['Հունվ','Փետ','Մարտ','Ապր','Մայ','Հուն','Հուլ','Օգ','Սեպ','Հոկ','Նոյ','Դեկ'];
+const d = ELECTION_DATE;
+document.getElementById('electionDateDisplay').textContent =
+  `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function animateNum(el, val){
+  const cur = el.textContent;
+  if (cur !== val) {
+    el.classList.add('flip');
+    setTimeout(() => el.classList.remove('flip'), 300);
+  }
+  el.textContent = val;
+}
+
+function updateCountdown(){
+  const now = new Date();
+  const diff = ELECTION_DATE - now;
+  if (diff <= 0) {
+    ['days','hours','mins','secs'].forEach(id => {
+      document.getElementById('cd-'+id).textContent = '00';
+    });
+    return;
+  }
+  const days  = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins  = Math.floor((diff % 3600000)  / 60000);
+  const secs  = Math.floor((diff % 60000)    / 1000);
+  animateNum(document.getElementById('cd-days'),  pad(days));
+  animateNum(document.getElementById('cd-hours'), pad(hours));
+  animateNum(document.getElementById('cd-mins'),  pad(mins));
+  animateNum(document.getElementById('cd-secs'),  pad(secs));
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+const songs = [
+  'music/song1.mp3',
+  'music/song2.mp3',
+  'music/song3.mp3'
+];
+
+function playSong(index) {
+
+  const player = document.getElementById('audioPlayer');
+
+  player.src = songs[index];
+
+  player.play();
+
+}
+
+const votes = [0, 0, 0];
+const names = ['Նիկոլ Փաշինյան', 'Սամվել Կարապետյան', 'Ռոբերտ Քոչարյան'];
+const colors = ['#c0392b', '#1a6b3a', '#3a6bc0'];
+let hasVoted = false;
+
+function handleVote(card, index) {
+  if (hasVoted) { showToast('Դուք արդեն ձայն եք տվել'); return; }
+  hasVoted = true;
+  votes[index]++;
+  
+  playSong(index);
+
+  const btn = card.querySelector('.vote-btn');
+  btn.classList.add('voted');
+  btn.innerHTML = '<span>✓</span> Ընտրված';
+
+  document.querySelectorAll('.candidate-card').forEach((c, i) => {
+    if (i !== index) c.style.opacity = '0.45';
+  });
+
+  showToast(`✦ Ձեր ձայնը տրվել է ${names[index]}-ին`);
+  showProgress();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+function showProgress() {
+
+  const section = document.getElementById('progressSection');
+  const container = document.getElementById('progressBars');
+
+  section.classList.add('visible');
+
+  const total = votes.reduce((a, b) => a + b, 0);
+
+  container.innerHTML = names.map((name, i) => {
+
+    const pct = total === 0
+      ? 0
+      : Math.round((votes[i] / total) * 100);
+
+    return `
+      <div class="progress-item">
+        <div class="progress-label">
+          <span>${name}</span>
+          <span style="color:var(--gold)">
+            ${pct}%
+          </span>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-fill"
+               style="--party-color:${colors[i]}"
+               id="pf-${i}">
+          </div>
+        </div>
+      </div>
+    `;
+
+  }).join('');
+
+  setTimeout(() => {
+
+    names.forEach((_, i) => {
+
+      const pct = total === 0
+        ? 0
+        : Math.round((votes[i] / total) * 100);
+
+      document.getElementById('pf-' + i).style.width = pct + '%';
+
+    });
+
+  }, 100);
+
+}
+
+function placeholderHTML(n) {
+  return `<div class="photo-placeholder" style="height:100%">
+    <div class="icon">👤</div>
+    <div class="ph-text">logo${n}.png</div>
+  </div><div class="photo-overlay"></div>
+  <span class="party-badge">Կուսակցություն ${['Ա','Բ','Գ'][n-1]}</span>
+  <span class="number-badge">${n}</span>`;
+}
+</script>
+
+<audio id="audioPlayer"></audio>
+
+</body>
+</html>
