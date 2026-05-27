@@ -635,78 +635,41 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const starsEl = document.getElementById('stars');
-for (let i = 0; i < 80; i++) {
-  const s = document.createElement('div');
-  s.className = 'star';
-  s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s`;
-  starsEl.appendChild(s);
-}
-
-const ELECTION_DATE = new Date('2026-06-07T08:00:00');
-
-const months = ['Հունվ','Փետ','Մարտ','Ապր','Մայ','Հուն','Հուլ','Օգ','Սեպ','Հոկ','Նոյ','Դեկ'];
-const d = ELECTION_DATE;
-document.getElementById('electionDateDisplay').textContent =
-  `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-
-function pad(n){ return String(n).padStart(2,'0'); }
-function animateNum(el, val){
-  const cur = el.textContent;
-  if (cur !== val) {
-    el.classList.add('flip');
-    setTimeout(() => el.classList.remove('flip'), 300);
-  }
-  el.textContent = val;
-}
-
-function updateCountdown(){
-  const now = new Date();
-  const diff = ELECTION_DATE - now;
-  if (diff <= 0) {
-    ['days','hours','mins','secs'].forEach(id => {
-      document.getElementById('cd-'+id).textContent = '00';
-    });
-    return;
-  }
-  const days  = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins  = Math.floor((diff % 3600000)  / 60000);
-  const secs  = Math.floor((diff % 60000)    / 1000);
-  animateNum(document.getElementById('cd-days'),  pad(days));
-  animateNum(document.getElementById('cd-hours'), pad(hours));
-  animateNum(document.getElementById('cd-mins'),  pad(mins));
-  animateNum(document.getElementById('cd-secs'),  pad(secs));
-}
-updateCountdown();
-setInterval(updateCountdown, 1000);
-
-const songs = [
-  'song1.mp3',
-  'song2.mp3',
-  'song3.mp3'
-];
-
-function playSong(index) {
-
-  const player = document.getElementById('audioPlayer');
-
-  player.src = songs[index];
-
-  player.play();
-
-}
-
-const votes = [0, 0, 0];
+// ====================== ՊԱՀՊԱՆՄԱՆ ՀԱՄԱԿԱՐԳ ======================
+let votes = JSON.parse(localStorage.getItem('electionVotes')) || [0, 0, 0];
 const names = ['Նիկոլ Փաշինյան', 'Սամվել Կարապետյան', 'Ռոբերտ Քոչարյան'];
 const colors = ['#c0392b', '#1a6b3a', '#3a6bc0'];
-let hasVoted = false;
 
+let hasVoted = localStorage.getItem('hasVoted') === 'true';
+let votedIndex = parseInt(localStorage.getItem('votedIndex')) || -1;
+
+const songs = ['song1.mp3', 'song2.mp3', 'song3.mp3'];
+
+// ====================== ԵՐԳ ======================
+function playSong(index) {
+  const player = document.getElementById('audioPlayer');
+  if (player) {
+    player.src = songs[index];
+    player.play().catch(() => {});
+  }
+}
+
+// ====================== ՔՎԵԱՐԿՈՒԹՅՈՒՆ ======================
 function handleVote(card, index) {
-  if (hasVoted) { showToast('Դուք արդեն ձայն եք տվել'); return; }
+  if (hasVoted) {
+    showToast('Դուք արդեն ձայն եք տվել');
+    return;
+  }
+
   hasVoted = true;
+  votedIndex = index;
   votes[index]++;
-  
+
+  // Պահպանում
+  localStorage.setItem('electionVotes', JSON.stringify(votes));
+  localStorage.setItem('hasVoted', 'true');
+  localStorage.setItem('votedIndex', index.toString());
+
   playSong(index);
 
   const btn = card.querySelector('.vote-btn');
@@ -721,15 +684,31 @@ function handleVote(card, index) {
   showProgress();
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3200);
+// ====================== ՎԵՐԱԿԱՆԳՆՈՒՄ ԷՋԻ ԲԵՌՆՄԱՆ ԺԱՄԱՆԱԿ ======================
+function restoreVote() {
+  // Միշտ ցույց տալ տոկոսները
+  showProgress();
+
+  if (hasVoted && votedIndex !== -1) {
+    const cards = document.querySelectorAll('.candidate-card');
+    if (cards[votedIndex]) {
+      const card = cards[votedIndex];
+      const btn = card.querySelector('.vote-btn');
+      
+      btn.classList.add('voted');
+      btn.innerHTML = '<span>✓</span> Ընտրված';
+
+      document.querySelectorAll('.candidate-card').forEach((c, i) => {
+        if (i !== votedIndex) c.style.opacity = '0.45';
+      });
+
+      playSong(votedIndex);   // երգը միացնել
+    }
+  }
 }
 
+// ====================== ՏՈԿՈՍՆԵՐԻ ՑՈՒՅՑ ======================
 function showProgress() {
-
   const section = document.getElementById('progressSection');
   const container = document.getElementById('progressBars');
 
@@ -738,45 +717,39 @@ function showProgress() {
   const total = votes.reduce((a, b) => a + b, 0);
 
   container.innerHTML = names.map((name, i) => {
-
-    const pct = total === 0
-      ? 0
-      : Math.round((votes[i] / total) * 100);
-
+    const pct = total === 0 ? 0 : Math.round((votes[i] / total) * 100);
     return `
       <div class="progress-item">
         <div class="progress-label">
           <span>${name}</span>
-          <span style="color:var(--gold)">
-            ${pct}%
-          </span>
+          <span style="color:var(--gold)">${pct}%</span>
         </div>
-
         <div class="progress-bar">
-          <div class="progress-fill"
-               style="--party-color:${colors[i]}"
+          <div class="progress-fill" 
+               style="--party-color:${colors[i]}" 
                id="pf-${i}">
           </div>
         </div>
       </div>
     `;
-
   }).join('');
 
+  // Անիմացիա
   setTimeout(() => {
-
     names.forEach((_, i) => {
-
-      const pct = total === 0
-        ? 0
-        : Math.round((votes[i] / total) * 100);
-
-      document.getElementById('pf-' + i).style.width = pct + '%';
-
+      const pct = total === 0 ? 0 : Math.round((votes[i] / total) * 100);
+      const el = document.getElementById('pf-' + i);
+      if (el) el.style.width = pct + '%';
     });
+  }, 200);
+}
 
-  }, 100);
-
+// Մնացած ֆունկցիաներ (toast, placeholderHTML և այլն)
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
 }
 
 function placeholderHTML(n) {
@@ -787,6 +760,41 @@ function placeholderHTML(n) {
   <span class="party-badge">Կուսակցություն ${['Ա','Բ','Գ'][n-1]}</span>
   <span class="number-badge">${n}</span>`;
 }
+
+// ====================== ՄԵԿՆԱՐԿ ======================
+window.onload = function() {
+  restoreVote();
+};
+
+// Countdown (չփոխված)
+const ELECTION_DATE = new Date('2026-06-07T08:00:00');
+const months = ['Հունվ','Փետ','Մարտ','Ապր','Մայ','Հուն','Հուլ','Օգ','Սեպ','Հոկ','Նոյ','Դեկ'];
+document.getElementById('electionDateDisplay').textContent = 
+  `${ELECTION_DATE.getDate()} ${months[ELECTION_DATE.getMonth()]} ${ELECTION_DATE.getFullYear()}`;
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function animateNum(el, val){
+  if (el.textContent !== val) {
+    el.classList.add('flip');
+    setTimeout(() => el.classList.remove('flip'), 300);
+  }
+  el.textContent = val;
+}
+function updateCountdown(){
+  const now = new Date();
+  const diff = ELECTION_DATE - now;
+  if (diff <= 0) return;
+  const days  = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins  = Math.floor((diff % 3600000)  / 60000);
+  const secs  = Math.floor((diff % 60000)    / 1000);
+  animateNum(document.getElementById('cd-days'), pad(days));
+  animateNum(document.getElementById('cd-hours'), pad(hours));
+  animateNum(document.getElementById('cd-mins'), pad(mins));
+  animateNum(document.getElementById('cd-secs'), pad(secs));
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
 </script>
 
 <audio id="audioPlayer"></audio>
