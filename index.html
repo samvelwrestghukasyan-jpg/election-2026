@@ -707,41 +707,47 @@ function restoreVote() {
   }
 }
 
-// ====================== ՏՈԿՈՍՆԵՐԻ ՑՈՒՅՑ ======================
 function showProgress() {
+
   const section = document.getElementById('progressSection');
   const container = document.getElementById('progressBars');
 
   section.classList.add('visible');
 
-  const total = votes.reduce((a, b) => a + b, 0);
+  // նորից բեռնում ենք պահված votes-ը
+  votes = JSON.parse(localStorage.getItem('electionVotes')) || [0,0,0];
+
+  const total = votes.reduce((a,b)=>a+b,0);
 
   container.innerHTML = names.map((name, i) => {
-    const pct = total === 0 ? 0 : Math.round((votes[i] / total) * 100);
+
+    const pct = total === 0
+      ? 0
+      : Math.round((votes[i] / total) * 100);
+
     return `
       <div class="progress-item">
         <div class="progress-label">
           <span>${name}</span>
-          <span style="color:var(--gold)">${pct}%</span>
+          <span style="color:var(--gold)">
+            ${pct}%
+          </span>
         </div>
+
         <div class="progress-bar">
-          <div class="progress-fill" 
-               style="--party-color:${colors[i]}" 
-               id="pf-${i}">
+          <div
+            class="progress-fill"
+            id="pf-${i}"
+            style="
+              width:${pct}%;
+              --party-color:${colors[i]}
+            ">
           </div>
         </div>
       </div>
     `;
-  }).join('');
 
-  // Անիմացիա
-  setTimeout(() => {
-    names.forEach((_, i) => {
-      const pct = total === 0 ? 0 : Math.round((votes[i] / total) * 100);
-      const el = document.getElementById('pf-' + i);
-      if (el) el.style.width = pct + '%';
-    });
-  }, 200);
+  }).join('');
 }
 
 // Մնացած ֆունկցիաներ (toast, placeholderHTML և այլն)
@@ -761,8 +767,20 @@ function placeholderHTML(n) {
   <span class="number-badge">${n}</span>`;
 }
 
-// ====================== ՄԵԿՆԱՐԿ ======================
-window.onload = function() {
+window.onload = function () {
+
+  // եթե votes չկա՝ ստեղծում ենք
+  if (!localStorage.getItem('electionVotes')) {
+    localStorage.setItem('electionVotes', JSON.stringify([0,0,0]));
+  }
+
+  // բեռնում ենք votes
+  votes = JSON.parse(localStorage.getItem('electionVotes'));
+
+  // միշտ ցույց ենք տալիս տոկոսները
+  showProgress();
+
+  // վերականգնում ենք ընտրված թեկնածուին
   restoreVote();
 };
 
